@@ -1,3 +1,4 @@
+
 diff_mat = zeros(num, num);
 for i=1:1:num
     for j = 1:1:num

@@ -2,8 +2,8 @@
 % remember keep headers on import google sheets
 % you need the client secret json accessible by production
 
-mentee_applicants = readtable('mentee_apps.csv');
-mentor_applicants = readtable('mentor_apps.csv');
+mentee_applicants = readtable('mentees_test.csv');
+mentor_applicants = readtable('mentors_test.csv');
 
 %%
 mentee_emails = mentee_applicants(:, 5);
