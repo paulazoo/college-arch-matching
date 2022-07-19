@@ -114,7 +114,7 @@ for i=1:1:total_matches
         essay_diff = 4 - abs(mentor_essay_rating - mentee_essay_rating);
         
         %% Accumulated differences value for this match
-        diff_mat(i, j) = interests_diff + backgrounds_diff + location_diff + college_school_diff;
+        diff_mat(i, j) = interests_diff + backgrounds_diff + location_diff + college_school_diff + essay_diff;
         
     end
 end
