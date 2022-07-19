@@ -9,6 +9,7 @@ diff_mat = zeros(total_matches, total_matches);
 7=location
 8=city
 9=dream_colleges
+10=length (application essay length)
 if mentor: 11=multi_mentees
 %}
 
@@ -82,6 +83,9 @@ for i=1:1:total_matches
         if ~any(strcmp(mentee_drcol_split,mentor_college))
             college_school_diff = 1;
         end
+
+        %% Effort differences
+
         
         %% Accumulated differences value for this match
         diff_mat(i, j) = interests_diff + backgrounds_diff + location_diff + college_school_diff;
