@@ -24,6 +24,7 @@ for i=1:1:total_matches
         mentee_location = cell2mat(mentees{i, 7});
         mentee_city = cell2mat(mentees{i, 8});
         mentee_dream_colleges = cell2mat(mentees{i, 9});
+        mentee_essay_length = cell2mat(mentees{i, 10});
         
         %% Mentor data
         mentor_college = cell2mat(mentors{j, 4});
@@ -31,6 +32,7 @@ for i=1:1:total_matches
         mentor_backgrounds = cell2mat(mentors{j, 6});
         mentor_location = cell2mat(mentors{j, 7});
         mentor_city = cell2mat(mentors{j, 8});
+        mentor_essay_length = cell2mat(mentors{i, 10});
         
         %% Interests Difference
         interests_diff = 0;
@@ -84,8 +86,32 @@ for i=1:1:total_matches
             college_school_diff = 1;
         end
 
-        %% Effort differences
+        %% Application length differences
+        if mentee_essay_length < 50
+            mentee_essay_rating = 0;
+        elseif mentee_essay_length < 100
+            mentee_essay_rating = 1;
+        elseif mentee_essay_length < 200
+            mentee_essay_rating = 2;
+        elseif mentee_essay_length < 400
+            mentee_essay_rating = 3;
+        else
+            mentee_essay_rating = 4;
+        end
 
+        if mentor_essay_length < 50
+            mentor_essay_rating = 0;
+        elseif mentor_essay_length < 100
+            mentor_essay_rating = 1;
+        elseif mentor_essay_length < 200
+            mentor_essay_rating = 2;
+        elseif mentor_essay_length < 400
+            mentor_essay_rating = 3;
+        else
+            mentor_essay_rating = 4;
+        end
+
+        essay_diff = 4 - abs(mentor_essay_rating - mentee_essay_rating);
         
         %% Accumulated differences value for this match
         diff_mat(i, j) = interests_diff + backgrounds_diff + location_diff + college_school_diff;
