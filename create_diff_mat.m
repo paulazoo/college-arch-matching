@@ -86,7 +86,7 @@ for i=1:1:total_matches
             college_school_diff = 1;
         end
 
-        %% Application length differences
+        %% Application essay length differences
         if mentee_essay_length < 50
             mentee_essay_rating = 0;
         elseif mentee_essay_length < 100
