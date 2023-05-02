@@ -3,7 +3,7 @@ College ARCH mentor and mentee matching using linear simplex method written in m
 
 
 ## TODO
-- after frontend/backend addition, account for mentee's importance ratings
+- account for mentee's importance ratings
 - account for essay length
 
 ## SQL Queries
