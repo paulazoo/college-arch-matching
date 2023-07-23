@@ -3,6 +3,8 @@ College ARCH mentor and mentee matching using linear simplex method written in m
 
 
 ## TODO
+- technically test it
+- consider other ways of matching (happy marriage?)
 
 ## SQL Queries
 - For mentors: SELECT id, display_name, email, school, interests, backgrounds, location, city, dream_colleges, LENGTH(essay), importance, multi_mentees
