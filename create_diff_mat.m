@@ -10,6 +10,7 @@ diff_mat = zeros(total_matches, total_matches);
 8=city
 9=dream_colleges
 10=length (application essay length)
+if mentee: 11=importance
 if mentor: 11=multi_mentees
 %}
 
@@ -25,6 +26,7 @@ for i=1:1:total_matches
         mentee_city = cell2mat(mentees{i, 8});
         mentee_dream_colleges = cell2mat(mentees{i, 9});
         mentee_essay_length = cell2mat(mentees{i, 10});
+        mentee_importance= cell2mat(mentees{i, 11});
         
         %% Mentor data
         mentor_college = cell2mat(mentors{j, 4});
@@ -34,7 +36,7 @@ for i=1:1:total_matches
         mentor_city = cell2mat(mentors{j, 8});
         mentor_essay_length = cell2mat(mentors{i, 10});
         
-        %% Interests Difference
+        %% Interests Difference min=0 max=3/3
         interests_diff = 0;
         
         mentee_interests_split = strsplit(mentee_interests, ',');
@@ -50,8 +52,11 @@ for i=1:1:total_matches
         
         % find number of interests in common
         interests_diff = length(intersect(mentee_interests_split, mentor_interests_split));
-                
-        %% Backgrounds Difference
+        
+        % normalize and also cap interests diff by 3
+        interests_diff = min([interests_diff / min([length(mentee_interests_split), 3]), 1])
+
+        %% Backgrounds Difference min=0 max=3/3
         backgrounds_diff = 0;
         
         mentee_backgrounds_split = strsplit(mentee_backgrounds, ',');
@@ -68,17 +73,20 @@ for i=1:1:total_matches
         % find number of backgrounds in common
         backgrounds_diff = length(intersect(mentee_backgrounds_split, mentor_backgrounds_split));
         
-        %% Location Difference
+        % normalize and also cap backgrounds diff by 3
+        backgrounds_diff = min([backgrounds_diff / min([length(mentee_backgrounds_split), 3]), 1])
+
+        %% Location Difference min=0 max = 1
         location_diff = 0;
         
         if strcmp(mentee_location, mentor_location)
-            location_diff = 1;
+            location_diff = 0.75;
             if strcmp(mentee_city, mentor_city)
-                location_diff = 2;
+                location_diff = 1.0;
             end
         end
         
-        %% Mentee dream colleges and Mentor school Difference
+        %% Mentee dream colleges and Mentor school Difference min=0 max=1
         college_school_diff = 0;
         
         mentee_drcol_split = strsplit(mentee_dream_colleges, ',');
@@ -86,7 +94,7 @@ for i=1:1:total_matches
             college_school_diff = 1;
         end
 
-        %% Application essay length differences
+        %% Application essay length differences min=0 max=4/4
         if mentee_essay_length < 50
             mentee_essay_rating = 0;
         elseif mentee_essay_length < 100
@@ -111,10 +119,33 @@ for i=1:1:total_matches
             mentor_essay_rating = 4;
         end
 
-        essay_diff = 4 - abs(mentor_essay_rating - mentee_essay_rating);
+        essay_diff = (4 - abs(mentor_essay_rating - mentee_essay_rating)) / 4;
+
+        %% Multipliers and importance ranking
+        college_school_multiplier = 0.2;
+        interests_multiplier = 0.2;
+        background_multiplier = 0.2;
+        location_multiplier = 0.2;
+        essay_multiplier = 0.2
+
+        importances = split(mentee_importance,' ')
+        importance_multipliers = [0.35, 0.2, 0.15, 0.1]
+        for imp = 1:1:length(importances):
+            if importances[imp] == '1'
+                college_school_multiplier = importance_multipliers[imp];
+            elseif importances[imp] == '2'
+                interests_multiplier = importance_multipliers[imp]
+            elseif importances[imp] == '3'
+                background_multiplier = importance_multipliers[imp]
+            elseif importances[imp] == '4'
+                location_multiplier = importance_multipliers[imp]
         
         %% Accumulated differences value for this match
-        diff_mat(i, j) = interests_diff + backgrounds_diff + location_diff + college_school_diff + essay_diff;
+        diff_mat(i, j) = interests_diff*interests_multiplier + ...
+            backgrounds_diff*background_multiplier + ...
+            location_diff*location_multiplier + ...
+            college_school_diff*college_school_multiplier + ...
+            essay_diff*essay_multiplier;
         
     end
 end
